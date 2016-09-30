@@ -1,17 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Data.OleDb;
-using System.Data;
-using System.IO;
-using LinqToExcel.Domain;
-using LinqToExcel.Extensions;
-
-namespace LinqToExcel.Query
+﻿namespace LinqToExcel.Query
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.OleDb;
+    using System.IO;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+    using LinqToExcel.Domain;
+    using LinqToExcel.Extensions;
+
     internal static class ExcelUtilities
     {
+        /// <summary>
+        /// Normalize the column name to remove whitespace and symbols.
+        /// </summary>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
+        internal static string NormalizeColumnName(string columnName)
+        {
+            return Regex.Replace(columnName.ToUpper(), "[^A-Z0-9]", string.Empty);
+        }
+
         internal static string GetConnectionString(ExcelQueryArgs args)
         {
             var connString = "";

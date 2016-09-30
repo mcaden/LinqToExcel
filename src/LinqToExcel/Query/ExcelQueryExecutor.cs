@@ -365,7 +365,7 @@ namespace LinqToExcel.Query
 
         private bool ColumnIsNotMapped(string columnName)
         {
-            return !_args.ColumnMappings.Values.Contains(columnName);
+            return !_args.ColumnMappings.Values.Select(e => ExcelUtilities.NormalizeColumnName(e)).Contains(ExcelUtilities.NormalizeColumnName(columnName));
         }
 
         private object GetColumnValue(IDataRecord data, string columnName, string propertyName)

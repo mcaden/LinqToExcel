@@ -83,7 +83,7 @@ namespace LinqToExcel
         /// <param name="column">Worksheet column name to map from</param>
         public void AddMapping(string propertyName, string column)
         {
-            _columnMappings[propertyName] = column;
+            _columnMappings[propertyName] = ExcelUtilities.NormalizeColumnName(column);
         }
 
         /// <summary>
