@@ -292,6 +292,12 @@ namespace LinqToExcel.Query
             if (_args.StrictMapping.Value != StrictMappingType.None)
                 this.ConfirmStrictMapping(columns, props, _args.StrictMapping.Value);
 
+            Dictionary<string, string> columnMapping = new Dictionary<string, string>();
+            foreach (string column in columns)
+            {
+                columnMapping.Add(ExcelUtilities.NormalizeColumnName(column), column);
+            }
+
             while (data.Read())
             {
                 var result = Activator.CreateInstance(fromType);
@@ -300,9 +306,10 @@ namespace LinqToExcel.Query
                     var columnName = (_args.ColumnMappings.ContainsKey(prop.Name)) ?
                         _args.ColumnMappings[prop.Name] :
                         prop.Name;
-                    if (columns.Contains(columnName))
+                    if (columnMapping.ContainsKey(ExcelUtilities.NormalizeColumnName(columnName)))
                     {
-                        var value = GetColumnValue(data, columnName, prop.Name).Cast(prop.PropertyType);
+                        var column = columnMapping[ExcelUtilities.NormalizeColumnName(columnName)];
+                        var value = GetColumnValue(data, column, prop.Name).Cast(prop.PropertyType);
                         value = TrimStringValue(value);
                         result.SetProperty(prop.Name, value);
                     }
